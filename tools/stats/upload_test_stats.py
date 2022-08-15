@@ -28,12 +28,12 @@ def parse_xml_report(
     report: Path,
     workflow_id: int,
     workflow_run_attempt: int,
+    job_id: int,
 ) -> List[Dict[str, Any]]:
     """Convert a test report xml file into a JSON-serializable list of test cases."""
     print(f"Parsing {tag}s for test report: {report}")
 
-    job_id = get_job_id(report)
-    print(f"Found job id: {job_id}")
+    print(f"Job id is: {job_id}")
 
     root = ET.parse(report)
 
@@ -153,12 +153,14 @@ def get_tests(
         # Parse the reports and transform them to JSON
         test_cases = []
         for xml_report in Path(".").glob("**/*.xml"):
+            job_id = get_job_id(xml_report)
             test_cases.extend(
                 parse_xml_report(
                     "testcase",
                     xml_report,
                     workflow_run_id,
                     workflow_run_attempt,
+                    job_id
                 )
             )
 

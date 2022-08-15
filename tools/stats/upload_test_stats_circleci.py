@@ -15,7 +15,7 @@ from tools.stats.upload_test_stats import (
 
 
 def get_tests_for_circleci(
-    workflow_run_id: int, workflow_run_attempt: int
+    workflow_run_id: int, workflow_run_attempt: int, job_id: int
 ) -> Tuple[List[Dict[str, Any]], Dict[Any, Any]]:
     # Parse the reports and transform them to JSON
     test_cases = []
@@ -26,6 +26,7 @@ def get_tests_for_circleci(
                 xml_report,
                 workflow_run_id,
                 workflow_run_attempt,
+                job_id
             )
         )
 
@@ -48,9 +49,15 @@ if __name__ == "__main__":
         required=True,
         help="Head branch of the workflow",
     )
+    parser.add_argument(
+        "--job-id",
+        required=True,
+        help="Head branch of the workflow",
+    )
     args = parser.parse_args()
     test_cases, pytest_parallel_times = get_tests_for_circleci(
-        args.circle_workflow_id, 1  # im not sure how to get attempt number for circleci
+        args.circle_workflow_id, 1,  # im not sure how to get attempt number for circleci
+        args.job_id
     )
 
     # Flush stdout so that any errors in rockset upload show up last in the logs.

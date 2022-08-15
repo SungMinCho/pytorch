@@ -937,6 +937,7 @@ def main():
         get_test_case_configs(dirpath=test_directory)
 
     has_failed = False
+    selected_tests = ['test_cpp_extensions_aot_ninja']
     failure_messages = []
     try:
         for test in selected_tests:
