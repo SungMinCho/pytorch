@@ -743,6 +743,7 @@ jobs:
       - run:
           name: copy files
           command: |
+            mkdir -p tmp/test-reports_${CIRCLE_BUILD_NUM}/test/test-reports
             cp -r test/test-reports tmp/test-reports_${CIRCLE_BUILD_NUM}/test/test-reports
       - store_test_results:
           path: test/test-reports
