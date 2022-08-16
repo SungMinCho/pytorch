@@ -19,7 +19,7 @@ def get_tests_for_circleci(
 ) -> Tuple[List[Dict[str, Any]], Dict[Any, Any]]:
     # Parse the reports and transform them to JSON
     test_cases = []
-    for xml_report in Path(".").glob("**/test/test_reports/**/*.xml"):
+    for xml_report in Path(".").glob("**/test/test-reports/**/*.xml"):
         test_cases.extend(
             parse_xml_report(
                 "testcase",
