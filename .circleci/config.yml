@@ -1443,6 +1443,18 @@ workflows:
             branches:
               only:
                 - postnightly
+      - mac_build:
+          name: macos-12-py3-x86-64-build
+          build-environment: macos-12-py3-x86-64
+          xcode-version: "13.3.1"
+      - mac_test:
+          name: macos-12-py3-x86-64-test-1-2-default
+          build-environment: macos-12-py3-x86-64
+          xcode-version: "13.3.1"
+          shard-number: "1"
+          num-test-shards: "2"
+          requires:
+            - macos-12-py3-x86-64-build
       - pytorch_ios_build:
           build_environment: ios-12-5-1-x86-64
           ios_arch: x86_64
