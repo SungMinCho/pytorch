@@ -272,7 +272,6 @@
       - persist_to_workspace:
           root: /Users/distiller/project/
           paths:
-            - miniconda3
             - tmp
 
   upload_test_stats:
@@ -284,7 +283,7 @@
           at: ~/workspace
       - run:
           name: upload
-          commnad: |
+          command: |
             set -ex
             cd ~/workspace
             ls
