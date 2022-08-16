@@ -55,6 +55,7 @@ if __name__ == "__main__":
         help="Head branch of the workflow",
     )
     args = parser.parse_args()
+    print(args.circle_workflow_id)
     test_cases, pytest_parallel_times = get_tests_for_circleci(
         args.circle_workflow_id, 1,  # im not sure how to get attempt number for circleci
         args.job_id
