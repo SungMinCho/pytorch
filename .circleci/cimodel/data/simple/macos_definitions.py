@@ -81,16 +81,6 @@ def get_new_workflow_jobs():
                 )
             }
         ),
-        OrderedDict(
-            {
-                "upload_test_stats": OrderedDict(
-                    {
-                        "name": "upload test status",
-                        "requires": ["macos-12-py3-x86-64-test-1-2-default"],
-                    }
-                )
-            }
-        ),
         # OrderedDict(
         #     {
         #         "mac_test": OrderedDict(
