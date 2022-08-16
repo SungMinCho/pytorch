@@ -741,32 +741,39 @@ jobs:
             python3 -mpip install dist/*.whl
             .jenkins/pytorch/macos-test.sh
       - run:
-          name: Report results
-          no_output_timeout: "5m"
+          name: copy files
           command: |
-            set -ex
-            source /Users/distiller/workspace/miniconda3/bin/activate
-            python3 -m pip install boto3==1.19.12
+            cp -r test/test-reports tmp/test-reports_${CIRCLE_BUILD_NUM}/test/test-reports
+      - store_test_results:
+          path: test/test-reports
+      - persist_to_workspace:
+          root: /Users/distiller/project/
+          paths:
+            - miniconda3
+            - tmp
 
-            export JOB_BASE_NAME=$CIRCLE_JOB
-
-            # Using the same IAM user to write stats to our OSS bucket
-            export AWS_ACCESS_KEY_ID=${CIRCLECI_AWS_ACCESS_KEY_FOR_SCCACHE_S3_BUCKET_V4}
-            export AWS_SECRET_ACCESS_KEY=${CIRCLECI_AWS_SECRET_KEY_FOR_SCCACHE_S3_BUCKET_V4}
-            python -m tools.stats.print_test_stats --upload-to-s3 --compare-with-s3 test
+  upload_test_stats:
+    machine: # executor type
+      image: ubuntu-2004:202010-01 # # recommended linux image - includes Ubuntu 20.04, docker 19.03.13, docker-compose 1.27.4
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/workspace
       - run:
-          name: upload summaries to s3
-          command: |
+          name: upload
+          commnad: |
+            set -ex
+            cd ~/workspace
+            ls
+            cd ~/project
             source /Users/distiller/workspace/miniconda3/bin/activate
             pip3 install requests==2.26
             pip3 install rockset==0.8.3
+            pip3 install boto3==1.19.12
             pip3 install six==1.16.0
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_FOR_OSSCI_ARTIFACT_UPLOAD}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY_FOR_OSSCI_ARTIFACT_UPLOAD}
-            python3 -m tools.stats.upload_test_stats_circleci --circle-workflow-id "${CIRCLE_WORKFLOW_JOB_ID}" --head-branch << pipeline.git.branch >> --job-id "${CIRCLE_BUILD_NUM}"
-      - store_test_results:
-          path: test/test-reports
-
+            python3 -m tools.stats.upload_test_stats_circleci --circle-workflow-id "${CIRCLE_WORKFLOW_JOB_ID}" --head-branch << pipeline.git.branch >>
   pytorch_macos_10_13_py3_test:
     environment:
       BUILD_ENVIRONMENT: pytorch-macos-10.13-py3-test
@@ -1455,6 +1462,10 @@ workflows:
           num-test-shards: "2"
           requires:
             - macos-12-py3-x86-64-build
+      - upload_test_stats:
+          name: upload test status
+          requires:
+            - macos-12-py3-x86-64-test-1-2-default
       - pytorch_ios_build:
           build_environment: ios-12-5-1-x86-64
           ios_arch: x86_64

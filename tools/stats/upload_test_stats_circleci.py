@@ -3,9 +3,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from tools.stats.upload_stats_lib import (
-    upload_to_s3,
-)
+from tools.stats.upload_stats_lib import upload_to_s3
 from tools.stats.upload_test_stats import (
     get_invoking_file_times,
     get_pytest_parallel_times,
@@ -15,18 +13,14 @@ from tools.stats.upload_test_stats import (
 
 
 def get_tests_for_circleci(
-    workflow_run_id: int, workflow_run_attempt: int, job_id: int
+    workflow_run_id: int, workflow_run_attempt: int
 ) -> Tuple[List[Dict[str, Any]], Dict[Any, Any]]:
     # Parse the reports and transform them to JSON
     test_cases = []
-    for xml_report in Path(".").glob("**/test/test-reports/**/*.xml"):
+    for xml_report in Path(".").glob("**/*.xml"):
         test_cases.extend(
             parse_xml_report(
-                "testcase",
-                xml_report,
-                workflow_run_id,
-                workflow_run_attempt,
-                job_id
+                "testcase", xml_report, workflow_run_id, workflow_run_attempt
             )
         )
 
@@ -49,16 +43,11 @@ if __name__ == "__main__":
         required=True,
         help="Head branch of the workflow",
     )
-    parser.add_argument(
-        "--job-id",
-        required=True,
-        help="Head branch of the workflow",
-    )
     args = parser.parse_args()
     print(args.circle_workflow_id)
     test_cases, pytest_parallel_times = get_tests_for_circleci(
-        args.circle_workflow_id, 1,  # im not sure how to get attempt number for circleci
-        args.job_id
+        args.circle_workflow_id,
+        1,  # im not sure how to get attempt number for circleci
     )
 
     # Flush stdout so that any errors in rockset upload show up last in the logs.
