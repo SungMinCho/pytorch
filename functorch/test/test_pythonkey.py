@@ -346,7 +346,6 @@ class TestEagerFusionOpInfo(TestCase):
         skip('nn.functional.binary_cross_entropy_with_logits'),  # seems to fail sometimes?
         skip('nn.functional.margin_ranking_loss'),  # seems flaky
     })
-    @unittest.skip("Currently flaky on master for unclear reasons. Skipping for now")
     def test_aot_autograd_exhaustive(self, device, dtype, op):
         def f(args, kwargs):
             return op.op(*args, **kwargs)
@@ -373,10 +372,6 @@ class TestEagerFusionOpInfo(TestCase):
 
             def get_grads(args):
                 return pytree.tree_map(lambda x: x.grad, args)
-
-            # NB: We cache on function id, which is unreliable
-            # Can fix by using weakrefs, but not sure if it matters
-            clear_compile_cache()
 
             compiled_f = compiled_function(f, nop, nop)
 
