@@ -770,7 +770,8 @@ jobs:
             pip3 install six==1.16.0
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_FOR_OSSCI_ARTIFACT_UPLOAD}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY_FOR_OSSCI_ARTIFACT_UPLOAD}
-            python3 -m tools.stats.upload_test_stats --workflow-run-id "${CIRCLE_WORKFLOW_JOB_ID}" --workflow-run-attempt 1 --head-branch << pipeline.git.branch >>
+            # i dont know how to get the run attempt number for reruns so default to 1
+            python3 -m tools.stats.upload_test_stats --workflow-run-id "${CIRCLE_WORKFLOW_JOB_ID}" --workflow-run-attempt 1 --head-branch << pipeline.git.branch >> --circleci
   pytorch_macos_10_13_py3_test:
     environment:
       BUILD_ENVIRONMENT: pytorch-macos-10.13-py3-test
@@ -1459,8 +1460,18 @@ workflows:
           num-test-shards: "2"
           requires:
             - macos-12-py3-x86-64-build
+      - mac_test:
+          name: macos-12-py3-x86-64-test-2-2-default
+          build-environment: macos-12-py3-x86-64
+          xcode-version: "13.3.1"
+          shard-number: "2"
+          num-test-shards: "2"
+          requires:
+            - macos-12-py3-x86-64-build
       - upload_test_stats:
           name: upload test status
           requires:
             - macos-12-py3-x86-64-test-1-2-default
+            - macos-12-py3-x86-64-test-2-2-default
+            - macos-12-py3-x86-64-test-1-1-functorch
     when: << pipeline.parameters.run_build >>

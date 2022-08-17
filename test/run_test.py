@@ -327,6 +327,7 @@ def discover_functorch_tests():
     assert len(result) >= 8
     return result
 
+
 FUNCTORCH_TESTS = discover_functorch_tests()
 
 TESTS_REQUIRING_LAPACK = [
@@ -873,7 +874,7 @@ def get_selected_tests(options):
             print(
                 "::warning:: Gathered no stats from artifacts. Proceeding with default sharding plan."
             )
-            selected_tests = selected_tests[which_shard - 1 :: num_shards]
+            selected_tests = selected_tests[which_shard - 1:: num_shards]
         else:
             print("Found test time stats from artifacts")
             test_file_times_config = test_file_times[test_config]
@@ -937,7 +938,6 @@ def main():
         get_test_case_configs(dirpath=test_directory)
 
     has_failed = False
-    selected_tests = ['test_cpp_extensions_aot_ninja']
     failure_messages = []
     try:
         for test in selected_tests:

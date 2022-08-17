@@ -279,7 +279,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Upload test stats to Rockset")
     parser.add_argument(
         "--workflow-run-id",
-        type=int,
         required=True,
         help="id of the workflow to get artifacts from",
     )
