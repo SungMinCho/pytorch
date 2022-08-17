@@ -295,7 +295,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--circleci",
-        action='store_true',
+        action="store_true",
         help="If this is being run through circleci",
     )
     args = parser.parse_args()
