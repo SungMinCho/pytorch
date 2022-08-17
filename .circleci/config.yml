@@ -770,7 +770,7 @@ jobs:
             pip3 install six==1.16.0
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_FOR_OSSCI_ARTIFACT_UPLOAD}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY_FOR_OSSCI_ARTIFACT_UPLOAD}
-            python3 -m tools.stats.upload_test_stats_circleci --circle-workflow-id "${CIRCLE_WORKFLOW_JOB_ID}" --head-branch << pipeline.git.branch >>
+            python3 -m tools.stats.upload_test_stats --workflow-run-id "${CIRCLE_WORKFLOW_JOB_ID}" --workflow-run-attempt 1 --head-branch << pipeline.git.branch >>
   pytorch_macos_10_13_py3_test:
     environment:
       BUILD_ENVIRONMENT: pytorch-macos-10.13-py3-test
