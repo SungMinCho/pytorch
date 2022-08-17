@@ -1468,6 +1468,15 @@ workflows:
           num-test-shards: "2"
           requires:
             - macos-12-py3-x86-64-build
+      - mac_test:
+          name: macos-12-py3-x86-64-test-1-1-functorch
+          build-environment: macos-12-py3-x86-64
+          xcode-version: "13.3.1"
+          shard-number: "1"
+          num-test-shards: "1"
+          test-config: functorch
+          requires:
+            - macos-12-py3-x86-64-build
       - upload_test_stats:
           name: upload test status
           requires:

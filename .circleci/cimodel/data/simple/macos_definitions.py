@@ -95,21 +95,21 @@ def get_new_workflow_jobs():
                 )
             }
         ),
-        # OrderedDict(
-        #     {
-        #         "mac_test": OrderedDict(
-        #             {
-        #                 "name": "macos-12-py3-x86-64-test-1-1-functorch",
-        #                 "build-environment": "macos-12-py3-x86-64",
-        #                 "xcode-version": quote("13.3.1"),
-        #                 "shard-number": quote("1"),
-        #                 "num-test-shards": quote("1"),
-        #                 "test-config": "functorch",
-        #                 "requires": ["macos-12-py3-x86-64-build"],
-        #             }
-        #         )
-        #     }
-        # ),
+        OrderedDict(
+            {
+                "mac_test": OrderedDict(
+                    {
+                        "name": "macos-12-py3-x86-64-test-1-1-functorch",
+                        "build-environment": "macos-12-py3-x86-64",
+                        "xcode-version": quote("13.3.1"),
+                        "shard-number": quote("1"),
+                        "num-test-shards": quote("1"),
+                        "test-config": "functorch",
+                        "requires": ["macos-12-py3-x86-64-build"],
+                    }
+                )
+            }
+        ),
         # OrderedDict(
         #     {
         #         "mac_build": OrderedDict(
