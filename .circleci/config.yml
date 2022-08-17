@@ -743,14 +743,14 @@ jobs:
       - run:
           name: copy files
           command: |
-            mkdir -p tmp/test-reports_${CIRCLE_BUILD_NUM}/test/test-reports
-            cp -r test/test-reports tmp/test-reports_${CIRCLE_BUILD_NUM}/test/test-reports
+            mkdir -p test-reports/test-reports_${CIRCLE_BUILD_NUM}/test/test-reports
+            cp -r test/test-reports test-reports/test-reports_${CIRCLE_BUILD_NUM}/test/test-reports
       - store_test_results:
           path: test/test-reports
       - persist_to_workspace:
           root: /Users/distiller/project/
           paths:
-            - tmp
+            - test-reports
 
   upload_test_stats:
     machine: # executor type
@@ -763,7 +763,7 @@ jobs:
           name: upload
           command: |
             set -ex
-            cp -r ~/workspace/tmp ~/project
+            cp -r ~/workspace/test-reports/* ~/project
             pip3 install requests==2.26
             pip3 install rockset==0.8.3
             pip3 install boto3==1.19.12

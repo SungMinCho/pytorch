@@ -17,7 +17,7 @@ def get_tests_for_circleci(
 ) -> Tuple[List[Dict[str, Any]], Dict[Any, Any]]:
     # Parse the reports and transform them to JSON
     test_cases = []
-    for xml_report in Path(".").glob("**/*.xml"):
+    for xml_report in Path(".").glob("**/test/test-reports/**/*.xml"):
         test_cases.extend(
             parse_xml_report(
                 "testcase", xml_report, workflow_run_id, workflow_run_attempt
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         help="Head branch of the workflow",
     )
     args = parser.parse_args()
-    print(args.circle_workflow_id)
+    print(f"workflow id is: {args.circle_workflow_id}")
     test_cases, pytest_parallel_times = get_tests_for_circleci(
         args.circle_workflow_id,
         1,  # im not sure how to get attempt number for circleci
